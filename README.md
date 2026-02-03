@@ -1,4 +1,4 @@
-# Trading 212 Sticky Notes - Professional Desktop Application
+# Trading 212 Sticky Notes - Professional Desktop Applicatio
 
 A modern, Proton-inspired Windows desktop application for real-time monitoring of your Trading 212 portfolio via elegant sticky notes.
 
