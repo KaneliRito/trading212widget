@@ -1,0 +1,272 @@
+<Window x:Class="Trading212Stick.Views.StickyNoteWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Sticky Note" 
+        Width="320" 
+        Height="240"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ResizeMode="CanResizeWithGrip"
+        ShowInTaskbar="False"
+        Topmost="{Binding IsTopmost}">
+
+    <Border Background="{DynamicResource BackgroundSecondaryBrush}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="1"
+            CornerRadius="12"
+            Effect="{StaticResource ProtonShadow}">
+        
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Title Bar -->
+            <Border Grid.Row="0" 
+                    Background="{DynamicResource BackgroundPrimaryBrush}"
+                    CornerRadius="12,12,0,0"
+                    Padding="16,12"
+                    MouseLeftButtonDown="TitleBar_MouseLeftButtonDown"
+                    MouseLeftButtonUp="TitleBar_MouseLeftButtonUp"
+                    Cursor="SizeAll">
+                
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0"
+                               Text="{Binding Title}"
+                               Style="{StaticResource ProtonTitle}"
+                               FontSize="16"
+                               VerticalAlignment="Center"/>
+
+                    <StackPanel Grid.Column="1" 
+                                Orientation="Horizontal">
+                        <!-- Settings Button -->
+                        <Button Command="{Binding ToggleSettingsCommand}"
+                                Style="{StaticResource ProtonIconButton}"
+                                Margin="4,0"
+                                ToolTip="Settings">
+                            <TextBlock Text="⚙" FontSize="14"/>
+                        </Button>
+
+                        <!-- Lock/Unlock Button: controls foreground (Topmost) -->
+                        <Button Command="{Binding ToggleLockCommand}"
+                                Style="{StaticResource ProtonIconButton}"
+                                Margin="4,0"
+                                ToolTip="Toggle foreground (lock)">
+                            <TextBlock Text="{Binding IsLocked, Converter={StaticResource LockIconConverter}}" FontSize="14"/>
+                        </Button>
+
+                        <!-- Pin Button: controls movability (pin = fixed) -->
+                        <Button Command="{Binding TogglePinCommand}"
+                                Style="{StaticResource ProtonIconButton}"
+                                Opacity="{Binding PinButtonOpacity}"
+                                ToolTip="Toggle movable (pin to fix position)"
+                                Margin="4,0">
+                            <TextBlock Text="📌" FontSize="12"/>
+                        </Button>
+
+                        <Button Click="MinimizeButton_Click"
+                                Style="{StaticResource ProtonIconButton}"
+                                Margin="4,0">
+                            <TextBlock Text="─" FontSize="12" Margin="0,-4,0,0"/>
+                        </Button>
+                        <Button Click="CloseButton_Click"
+                                Style="{StaticResource ProtonIconButton}">
+                            <TextBlock Text="✕" FontSize="14"/>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Content -->
+            <Grid Grid.Row="1" Margin="16">
+                
+                <!-- Settings View -->
+                <Grid Visibility="{Binding IsSettingsVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" Margin="0,0,0,12">
+                        <StackPanel>
+                            <TextBlock Text="Instellingen" Style="{StaticResource ProtonTitle}" FontSize="18" Margin="0,0,0,12"/>
+                            
+                            <TextBlock Text="API Key" Style="{StaticResource ProtonLabel}" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding EditApiKey, UpdateSourceTrigger=PropertyChanged}" 
+                                     Style="{StaticResource ProtonTextBox}"
+                                     Margin="0,0,0,12"/>
+
+                            <TextBlock Text="API Secret" Style="{StaticResource ProtonLabel}" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding EditApiSecret, UpdateSourceTrigger=PropertyChanged}" 
+                                     Style="{StaticResource ProtonTextBox}"
+                                     Margin="0,0,0,12"/>
+
+                            <TextBlock Text="Update Interval (sec)" Style="{StaticResource ProtonLabel}" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding EditUpdateInterval, UpdateSourceTrigger=PropertyChanged}" 
+                                     Style="{StaticResource ProtonTextBox}"
+                                     Margin="0,0,0,12"/>
+
+                            <TextBlock Text="API URL" Style="{StaticResource ProtonLabel}" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding EditApiUrl, UpdateSourceTrigger=PropertyChanged}" 
+                                     Style="{StaticResource ProtonTextBox}"
+                                     Margin="0,0,0,12"/>
+                        </StackPanel>
+                    </ScrollViewer>
+                    
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="Annuleren" 
+                                Command="{Binding ToggleSettingsCommand}"
+                                Foreground="{DynamicResource TextSecondaryBrush}"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Padding="12,6"
+                                Margin="0,0,8,0"/>
+                        
+                        <Button Content="Opslaan" 
+                                Command="{Binding SaveSettingsCommand}"
+                                Style="{StaticResource ProtonButton}"
+                                Margin="0,0,0,0">
+                            <Button.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="4"/>
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Portfolio View -->
+                <Grid Visibility="{Binding IsSettingsVisible, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                    <!-- Loading indicator -->
+                    <TextBlock Text="Laden..."
+                               Style="{StaticResource ProtonLabel}"
+                               Foreground="{DynamicResource TextPrimaryBrush}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+                    <!-- Error message -->
+                    <Border Background="{DynamicResource BackgroundTertiaryBrush}"
+                            CornerRadius="8"
+                            Padding="12"
+                            Visibility="{Binding IsError, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <StackPanel>
+                            <TextBlock Text="⚠ Fout bij ophalen data (Check Settings ⚙)"
+                                       Style="{StaticResource ProtonLabel}"
+                                       Foreground="{DynamicResource WarningBrush}"
+                                       FontWeight="SemiBold"
+                                       Margin="0,0,0,8"/>
+                            <TextBlock Text="{Binding ErrorMessage}"
+                                       Style="{StaticResource ProtonLabel}"
+                                       Foreground="{DynamicResource TextPrimaryBrush}"
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Portfolio data -->
+                    <StackPanel Visibility="{Binding IsError, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                    
+                    <!-- Total Value -->
+                    <StackPanel Margin="0,0,0,16">
+                        <TextBlock Text="Totale Waarde"
+                                   Style="{StaticResource ProtonLabel}"
+                                   Foreground="{DynamicResource TextPrimaryBrush}"
+                                   Margin="0,0,0,4"/>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Style="{StaticResource ProtonValue}"
+                                       Foreground="{DynamicResource TextPrimaryBrush}">
+                                <Run Text="€"/>
+                                <Run Text="{Binding TotalValue, StringFormat=N2, Mode=OneWay}"/>
+                            </TextBlock>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Day Result -->
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Dagresultaat"
+                                       Style="{StaticResource ProtonLabel}"
+                                       Foreground="{DynamicResource TextPrimaryBrush}"
+                                       Margin="0,0,0,4"/>
+                            <TextBlock Style="{StaticResource ProtonSubValue}"
+                                       Foreground="{Binding DayResult, Converter={StaticResource PositiveNegativeColorConverter}}">
+                                <Run Text="€"/>
+                                <Run Text="{Binding DayResult, StringFormat=N2, Mode=OneWay}"/>
+                            </TextBlock>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" HorizontalAlignment="Right">
+                            <TextBlock Text="Percentage"
+                                       Style="{StaticResource ProtonLabel}"
+                                       Foreground="{DynamicResource TextPrimaryBrush}"
+                                       Margin="0,0,0,4"/>
+                            <TextBlock Style="{StaticResource ProtonSubValue}"
+                                       Foreground="{Binding DayResult, Converter={StaticResource PositiveNegativeColorConverter}}">
+                                <Run Text="{Binding DayResultPercentage, StringFormat=N2, Mode=OneWay}"/>
+                                <Run Text="%"/>
+                            </TextBlock>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Total P/L -->
+                    <Border Background="{DynamicResource BackgroundTertiaryBrush}"
+                            CornerRadius="8"
+                            Padding="12"
+                            Margin="0,8,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Totale Winst/Verlies"
+                                           Style="{StaticResource ProtonLabel}"
+                                           Foreground="{DynamicResource TextPrimaryBrush}"
+                                           Margin="0,0,0,4"/>
+                                <TextBlock Style="{StaticResource ProtonSubValue}"
+                                           FontSize="14"
+                                           Foreground="{Binding TotalProfitLoss, Converter={StaticResource PositiveNegativeColorConverter}}">
+                                    <Run Text="€"/>
+                                    <Run Text="{Binding TotalProfitLoss, StringFormat=N2, Mode=OneWay}"/>
+                                </TextBlock>
+                            </StackPanel>
+
+                            <TextBlock Grid.Column="1"
+                                       VerticalAlignment="Center"
+                                       Style="{StaticResource ProtonSubValue}"
+                                       FontSize="14"
+                                       Foreground="{Binding TotalProfitLoss, Converter={StaticResource PositiveNegativeColorConverter}}">
+                                <Run Text="{Binding TotalProfitLossPercentage, StringFormat=N2, Mode=OneWay}"/>
+                                <Run Text="%"/>
+                            </TextBlock>
+                        </Grid>
+                    </Border>
+
+                    <!-- Last updated -->
+                    <TextBlock Text="{Binding LastUpdated, StringFormat='Bijgewerkt: {0:HH:mm:ss}'}"
+                               Style="{StaticResource ProtonLabel}"
+                               Foreground="{DynamicResource TextPrimaryBrush}"
+                               HorizontalAlignment="Right"
+                               Margin="0,12,0,0"/>
+                </StackPanel>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

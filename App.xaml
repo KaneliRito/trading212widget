@@ -1,0 +1,18 @@
+<Application x:Class="Trading212Stick.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:Trading212Stick.Converters">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Themes/DarkTheme.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            
+            <!-- Converters -->
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+            <converters:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
+            <converters:LockIconConverter x:Key="LockIconConverter"/>
+            <converters:PositiveNegativeColorConverter x:Key="PositiveNegativeColorConverter"/>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

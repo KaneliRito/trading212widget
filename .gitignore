@@ -1,0 +1,72 @@
+# .NET / C# / WPF
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.swp
+*.tmp
+
+# Visual Studio
+.vs/
+.vscode/
+*.csproj.user
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa]rm/
+[Aa]rm64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# NuGet Packages
+*.nupkg
+*.snupkg
+packages/
+!**/packages/build/
+
+# Rider
+.idea/
+*.sln.iml
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Mono Auto Generated Files
+mono_crash.*
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Sensitive data
+appsettings.Development.json
+appsettings.Production.json
+*.key
+secrets.json
+
+# Logs
+*.log
+logs/
+
+# Application specific
+icon.ico
+*.exe
+*.dll
+*.pdb
+
+# MacOS
+.DS_Store
