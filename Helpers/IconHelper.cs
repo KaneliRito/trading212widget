@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Reflection;
 
 namespace Trading212Stick.Helpers
 {
@@ -33,6 +34,34 @@ namespace Trading212Stick.Helpers
             catch
             {
                 // Fallback naar standaard icon bij fouten
+                return SystemIcons.Application;
+            }
+        }
+
+        /// <summary>
+        /// Laadt een embedded PNG resource en converteert het naar een rond icon
+        /// </summary>
+        public static Icon CreateRoundIconFromEmbeddedPng(string resourceName, int size = 32)
+        {
+            try
+            {
+                var assembly = Assembly.GetExecutingAssembly();
+                using var stream = assembly.GetManifestResourceStream(resourceName);
+                if (stream == null)
+                {
+                    return SystemIcons.Application;
+                }
+
+                using (var originalImage = Image.FromStream(stream))
+                {
+                    using (var roundBitmap = CreateRoundBitmap(originalImage, size))
+                    {
+                        return Icon.FromHandle(roundBitmap.GetHicon());
+                    }
+                }
+            }
+            catch
+            {
                 return SystemIcons.Application;
             }
         }

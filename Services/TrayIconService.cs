@@ -29,9 +29,11 @@ namespace Trading212Stick.Services
 
         private void InitializeTrayIcon()
         {
-            // Laad het custom icon (rond)
-            var iconPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "play_store_512.png");
-            var customIcon = IconHelper.CreateRoundIconFromPng(iconPath, 32);
+            // Laad het custom icon (rond) uit embedded resource
+            var customIcon = IconHelper.CreateRoundIconFromEmbeddedPng(
+                "Trading212Stick.play_store_512.png",
+                32
+            );
 
             _notifyIcon = new NotifyIcon
             {
@@ -412,8 +414,8 @@ namespace Trading212Stick.Services
 
                 if (enable)
                 {
-                    var exePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
-                    exePath = exePath.Replace(".dll", ".exe");
+                    var exePath = Environment.ProcessPath
+                        ?? Path.Combine(AppContext.BaseDirectory, "Trading212Stick.exe");
                     key?.SetValue("Trading212Stick", $"\"{exePath}\"");
                 }
                 else

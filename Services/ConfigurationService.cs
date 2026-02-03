@@ -8,7 +8,7 @@ namespace Trading212Stick.Services
     public class ConfigurationService
     {
         private readonly string _configPath;
-        private AppSettings _settings;
+        private AppSettings _settings = new AppSettings();
 
         public ConfigurationService()
         {
@@ -36,17 +36,8 @@ namespace Trading212Stick.Services
                 }
                 else
                 {
-                    // Laad defaults van appsettings.json in project folder
-                    var defaultPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json");
-                    if (File.Exists(defaultPath))
-                    {
-                        var json = File.ReadAllText(defaultPath);
-                        _settings = JsonConvert.DeserializeObject<AppSettings>(json) ?? new AppSettings();
-                    }
-                    else
-                    {
-                        _settings = new AppSettings();
-                    }
+                    // Laad defaults van embedded appsettings.json (fallback naar bestand indien aanwezig)
+                    _settings = LoadDefaultSettings();
                     
                     SaveSettings();
                 }
@@ -68,6 +59,29 @@ namespace Trading212Stick.Services
             {
                 // Log error indien nodig
             }
+        }
+
+        private AppSettings LoadDefaultSettings()
+        {
+            // 1) Probeer appsettings.json naast de executable (dev scenario)
+            var defaultPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json");
+            if (File.Exists(defaultPath))
+            {
+                var json = File.ReadAllText(defaultPath);
+                return JsonConvert.DeserializeObject<AppSettings>(json) ?? new AppSettings();
+            }
+
+            // 2) Probeer embedded resource (single-file scenario)
+            var assembly = typeof(ConfigurationService).Assembly;
+            using var stream = assembly.GetManifestResourceStream("Trading212Stick.appsettings.json");
+            if (stream != null)
+            {
+                using var reader = new StreamReader(stream);
+                var json = reader.ReadToEnd();
+                return JsonConvert.DeserializeObject<AppSettings>(json) ?? new AppSettings();
+            }
+
+            return new AppSettings();
         }
 
         public void UpdateNotePosition(string noteId, double left, double top, double width, double height)
