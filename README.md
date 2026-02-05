@@ -1,4 +1,4 @@
-# Trading 212 Sticky Notes - Professional Desktop Applicatio
+# Trading 212 Sticky Notes - Professional Desktop Application
 
 A modern, Proton-inspired Windows desktop application for real-time monitoring of your Trading 212 portfolio via elegant sticky notes.
 
@@ -6,23 +6,16 @@ A modern, Proton-inspired Windows desktop application for real-time monitoring o
 ![WPF](https://img.shields.io/badge/WPF-Windows-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-## 📸 Screenshots
-
-![Trading 212 Sticky Notes](https://via.placeholder.com/800x450/2B2A33/FFFFFF?text=Trading+212+Sticky+Notes)
-
-## ✨ Features
+## Features
 
 - **Always-on-Top Sticky Notes**: Frameless, transparent windows that stay visible
 - **Realtime Portfolio Tracking**: Automatic updates of your Trading 212 portfolio data
-- **Proton Design System**: Sleek, minimalist design with dark/light theme support
 - **Drag & Drop**: Freely positionable notes with automatic position saving
 - **System Tray Integration**: Hide/show notes via system tray icon with extensive menu
-- **Auto-start Support**: Optionally start automatically when Windows boots
-- **Configurable**: Adjustable API endpoints and update intervals
+- **Configurable**: Adjustable API endpoints and update intervals (needs to be tested)
 - **Pin & Lock Controls**: Lock position or keep notes always on top
-- **Error Handling**: Elegant error messages while retaining last known data
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Requirements
 
@@ -45,22 +38,22 @@ A modern, Proton-inspired Windows desktop application for real-time monitoring o
    - Give your key a recognizable name (e.g., "Sticky Notes App")
 
 4. **Select the following permissions**:
-   - ✅ **Account data** - Basic account information
-   - ✅ **History** - Access to portfolio history
-   - ✅ **History - dividends** - Dividend history
-   - ✅ **History - orders** - Order history
-   - ✅ **History - transactions** - Transaction history
-   - ✅ **Metadata** - Account metadata
-   - ✅ **Pies read** - Read pie portfolios
-   - ✅ **Portfolio** - Portfolio data and positions
+   -  **Account data** - Basic account information
+   -  **History** - Access to portfolio history
+   -  **History - dividends** - Dividend history
+   -  **History - orders** - Order history
+   -  **History - transactions** - Transaction history
+   -  **Metadata** - Account metadata
+   -  **Pies read** - Read pie portfolios
+   -  **Portfolio** - Portfolio data and positions
 
 5. **Copy the API Key and Secret**
-   - ⚠️ **Warning**: The API Key and Secret are only shown once!
+   - **Warning**: The API Key and Secret are only shown once!
    - Store them safely (e.g., in a password manager)
 
-> **⚠️ Security**: Never share your API key and secret with others. They provide access to your portfolio data.
+> ** Security**: Never share your API key and secret with others. They provide access to your portfolio data.
 
-### 💾 Installation
+###  Installation
 
 1. **Download the latest release**
    ```bash
@@ -103,7 +96,7 @@ A modern, Proton-inspired Windows desktop application for real-time monitoring o
    .\bin\Release\net8.0-windows\Trading212Stick.exe
    ```
 
-## 🏗️ Architectuur
+## Architectuur
 
 ### Project Structuur
 
@@ -146,7 +139,7 @@ Trading212Stick/
 └── Trading212Stick.csproj      # Project bestand
 ```
 
-## 🎨 Gebruik
+## Gebruik
 
 ### Eerste Keer Opstarten
 
@@ -159,17 +152,17 @@ Bij de eerste keer opstarten:
 
 Rechtermuisklik op het tray icon voor:
 
-- **👁 Toon/Verberg Notes** - Beheer zichtbaarheid
-- **📌 Note Controle**
+- ** Toon/Verberg Notes** - Beheer zichtbaarheid
+- ** Note Controle**
   - Lock/Unlock (altijd op voorgrond)
   - Pin/Unpin (vergrendel positie)
-- **🎨 Thema** - Wissel tussen Dark/Light mode
-- **🚀 Start met Windows** - Auto-start bij opstarten
-- **⚙ Configuratie**
+- ** Thema** - Wissel tussen Dark/Light mode
+- ** Start met Windows** - Auto-start bij opstarten
+- ** Configuratie**
   - API Instellingen bekijken
   - Configuratiemap openen
   - Configuratie herladen
-- **❓ Help** - Over en documentatie
+- ** Help** - Over en documentatie
 
 ### Note Controls
 
@@ -180,7 +173,7 @@ Elke sticky note heeft:
 - **─ Minimize** - Minimaliseer naar taskbar
 - **✕ Close** - Verberg note (blijft draaien in tray)
 
-## 🔧 Configuration
+## Configuration
 
 ### API Settings
 
@@ -212,7 +205,7 @@ Example configuration:
 - **Default**: 60 seconds
 - **Warning**: Too frequent updates may lead to API rate limiting
 
-## ⚠️ Troubleshooting
+## Troubleshooting
 
 ### "API Error: 401 Unauthorized"
 - Check if your API key and secret are correctly configured
@@ -237,14 +230,14 @@ Example configuration:
 - Check if the saved position is outside the screen
 - Delete `%AppData%\Trading212Stick\settings.json` to reset
 
-## 🔒 Security
+## Security
 
 ### API Key Protection
 
-- ✅ API keys are stored locally (not in the cloud)
-- ✅ Credentials are masked in the UI
-- ⚠️ API keys are stored in plain text in `settings.json`
-- 💡 **Tip**: Use read-only API keys where possible
+-  API keys are stored locally (not in the cloud)
+-  Credentials are masked in the UI
+-  API keys are stored in plain text in `settings.json`
+-  **Tip**: Use read-only API keys where possible
 
 ### Best Practices
 
@@ -254,7 +247,7 @@ Example configuration:
 4. **Rotate your API key** periodically
 5. **Regularly check** which apps have access
 
-## 🏗️ Architectuur
+## Architectuur
 
 ### MVVM Pattern
 
@@ -267,7 +260,7 @@ De applicatie gebruikt strikte scheiding van concerns:
 ### Services Layer
 
 - **ConfigurationService**: JSON configuratie beheer
-## 🏗️ Architecture
+## Architecture
 
 ### MVVM Pattern
 
@@ -295,7 +288,7 @@ private async Task UpdateAllNotesAsync()
 }
 ```
 
-## 🎨 Proton Design System
+## Proton Design System
 
 The application uses the **Proton design language** (inspired by Proton Mail/Drive):
 
@@ -323,7 +316,7 @@ Customize colors in `Themes/DarkTheme.xaml` or `Themes/LightTheme.xaml`:
 <Color x:Key="ProtonPurple">#6D4AFF</Color>
 ```
 
-Switch themes via the tray menu: 🎨 Theme → 🌙 Dark / ☀ Light
+Switch themes via the tray menu: Theme → Dark / Light
       "Id": "portfolio_main",
       "Left": 1550,
       "Top": 50,
@@ -350,7 +343,7 @@ Na eerste run wordt de configuratie opgeslagen in:
 
 **Let op**: Te frequente updates kunnen leiden tot API rate limiting!
 
-## 📝 Extra Notes Toevoegen
+## Extra Notes Toevoegen
 
 Je kunt eenvoudig meerdere sticky notes toevoegen voor verschillende data:
 
@@ -387,7 +380,7 @@ public decimal CurrentPrice { get; set; }
 
 Maak een nieuwe View voor gespecialiseerde notes of gebruik DataTemplates.
 
-## 🌐 System Tray Functies
+## System Tray Functies
 
 Rechtermuisklik op het tray icon voor:
 
@@ -420,7 +413,7 @@ Rechtermuisklik op het tray icon voor:
 - Controleer of .NET 8.0 runtime is geïnstalleerd
 - Run `dotnet --list-runtimes` om versies te verifiëren
 
-## 🤝 Contributing
+## Contributing
 
 Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
 
